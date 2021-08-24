@@ -1,0 +1,3 @@
+[submodule "django.nV"]
+	path = django.nV
+	url = https://github.com/nVisium/django.nV.git
