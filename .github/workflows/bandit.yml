@@ -29,9 +29,11 @@ jobs:
         uses: jpetrucciani/bandit-check@1.6.2
         with:
           path: './django.nV'
+        continue-on-error: true
 
       - name: Bandit Check for facebook flask vulnerable app
         uses: jpetrucciani/bandit-check@1.6.2
         with:
           path: './flask_facebook'
+        continue-on-error: true
 
