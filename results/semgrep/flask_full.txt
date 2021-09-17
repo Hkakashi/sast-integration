@@ -1,0 +1,37 @@
+[32mflask_facebook/app.py[0m
+[31mseverity:error [0m[33mrule:home.developer.acas.semgrep-rules.python.flask.security.injection.path-traversal-open: Found request data in a call to 'open'. Ensure the request data is validated or sanitized, otherwise it could result in path traversal attacks.[0m
+34:    f = open(payload, "r")
+--------------------------------------------------------------------------------
+[31mseverity:error [0m[33mrule:home.developer.acas.semgrep-rules.python.flask.security.injection.ssrf-requests: Data from request object is passed to a new server-side request. This could lead to a server-side request forgery (SSRF). To mitigate, ensure that schemes and hosts are validated against an allowlist, do not forward the response to the user, and ensure proper authentication and transport-layer security in the proxied request.[0m
+54:    requests.get(payload)
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.flask.security.xss.audit.explicit-unescape-with-markup: Detected explicitly unescaped content using 'Markup()'. This permits the unescaped data to include unescaped HTML which could result in cross-site scripting. Ensure this data is not externally controlled, or consider rewriting to not use 'Markup()'.[0m
+41:    content = flask.Markup(payload)
+--------------------------------------------------------------------------------
+[31mseverity:error [0m[33mrule:home.developer.acas.semgrep-rules.python.lang.best-practice.open-never-closed: file object opened without corresponding close[0m
+34:    f = open(payload, "r")
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.lang.security.audit.dangerous-subprocess-use: Detected subprocess function 'run' without a static string. If this data can be controlled by a malicious actor, it may be an instance of command injection. Audit the use of this call to ensure it is not controllable by an external resource. You may consider using 'shlex.escape()'.[0m
+19:    subprocess.run(payload, shell=True)
+--------------------------------------------------------------------------------
+29:    subprocess.run(f"echo {payload}", shell=True)
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.lang.security.audit.formatted-sql-query: Detected possible formatted SQL query. Use parameterized queries instead.[0m
+49:    cur.execute(f"SELECT info FROM users WHERE name={payload}")
+--------------------------------------------------------------------------------
+[31mseverity:error [0m[33mrule:home.developer.acas.semgrep-rules.python.lang.security.audit.subprocess-shell-true: Found 'subprocess' function 'run' with 'shell=True'. This is dangerous because this call will spawn the command using a shell process. Doing so propagates current shell settings and variables, which makes it much easier for a malicious actor to execute commands. Use 'shell=False' instead.[0m
+[34mautofix:[0m s/(shell\s*=\s*)True/\1False/g
+19:    subprocess.run(payload, shell=True)
+--------------------------------------------------------------------------------
+[34mautofix:[0m s/(shell\s*=\s*)True/\1False/g
+29:    subprocess.run(f"echo {payload}", shell=True)
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.requests.best-practice.use-raise-for-status: There's an HTTP request made with requests, but the raise_for_status() utility method isn't used. This can result in request errors going unnoticed and your code behaving in unexpected ways, such as if your authorization API returns a 500 error while you're only checking for a 401.[0m
+54:    requests.get(payload)
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.requests.best-practice.use-timeout: By default, 'requests' calls wait until the connection is closed. This means a 'requests' call without a timeout will hang the program if a response is never received. Consider setting a timeout for all 'requests'.[0m
+[34mautofix:[0m s/(.*)\)/\1, timeout=30)/g
+54:    requests.get(payload)
+--------------------------------------------------------------------------------
+[31mseverity:error [0m[33mrule:home.developer.acas.semgrep-rules.python.sqlalchemy.security.sqlalchemy-execute-raw-query: Avoiding SQL string concatenation: untrusted input concatenated with raw SQL query can result in SQL Injection. In order to execute raw query safely, prepared statement should be used. SQLAlchemy provides TextualSQL to easily used prepared statement with named parameters. For complex SQL composition, use SQL Expression Language or Schema Definition Language. In most cases, SQLAlchemy ORM will be a better option.[0m
+49:    cur.execute(f"SELECT info FROM users WHERE name={payload}")

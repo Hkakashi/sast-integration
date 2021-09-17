@@ -1,0 +1,1 @@
+python3 -m semgrep --time --config=../semgrep-rules/python django.nV -o results/semgrep/django_full.txt

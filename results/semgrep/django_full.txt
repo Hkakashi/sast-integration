@@ -1,0 +1,554 @@
+[32mdjango.nV/taskManager/misc.py[0m
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.lang.security.audit.dangerous-system-call: Found dynamic content used in a system call. This is dangerous if external data can reach this function call because it allows a malicious actor to execute commands. Use the 'subprocess' module instead, which is easier to use without accidentally exposing a command injection vulnerability.[0m
+33:    os.system(
+34:        "mv " +
+35:        uploaded_file.temporary_file_path() +
+36:        " " +
+37:        "%s/%s" %
+38:        (upload_dir_path,
+39:         title))
+
+[32mdjango.nV/taskManager/templates/taskManager/base_backend.html[0m
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.flask.security.xss.audit.template-unescaped-with-safe: Detected a segment of a Flask template where autoescaping is explicitly disabled with '| safe' filter. This allows rendering of raw HTML in this segment. Ensure no user data is rendered here, otherwise this is a cross-site scripting (XSS) vulnerability.[0m
+58:                        <span class="username"><i class="fa fa-user fa-fw"></i> {{ user.username|safe }}</span>
+
+[32mdjango.nV/taskManager/templates/taskManager/profile_view.html[0m
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.flask.security.xss.audit.template-unquoted-attribute-var: Detected a unquoted template variable as an attribute. If unquoted, a malicious actor could inject custom JavaScript handlers. To fix this, add quotes around the template expression, like this: "{{ expr }}".[0m
+[34mautofix:[0m s/{{(.*?)}}/"{{\1}}"/g
+16:                <header class="panel-heading"{{user.first_name}} {{user.last_name}}</header>
+--------------------------------------------------------------------------------
+[34mautofix:[0m s/{{(.*?)}}/"{{\1}}"/g
+16:                <header class="panel-heading"{{user.first_name}} {{user.last_name}}</header>
+
+[32mdjango.nV/taskManager/templates/taskManager/search.html[0m
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.flask.security.xss.audit.template-unescaped-with-safe: Detected a segment of a Flask template where autoescaping is explicitly disabled with '| safe' filter. This allows rendering of raw HTML in this segment. Ensure no user data is rendered here, otherwise this is a cross-site scripting (XSS) vulnerability.[0m
+14:                    <a href="/taskManager/search/?q={{q|safe}}" id="loading-btn" class="btn btn-warning btn-xs"><i class="fa fa-refresh"></i> Refresh</a>
+
+[32mdjango.nV/taskManager/templates/taskManager/settings.html[0m
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.flask.security.xss.audit.template-unescaped-with-safe: Detected a segment of a Flask template where autoescaping is explicitly disabled with '| safe' filter. This allows rendering of raw HTML in this segment. Ensure no user data is rendered here, otherwise this is a cross-site scripting (XSS) vulnerability.[0m
+28:                              {{v|safe}}
+
+[32mdjango.nV/taskManager/templates/taskManager/task_details.html[0m
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.flask.security.xss.audit.template-unescaped-with-safe: Detected a segment of a Flask template where autoescaping is explicitly disabled with '| safe' filter. This allows rendering of raw HTML in this segment. Ensure no user data is rendered here, otherwise this is a cross-site scripting (XSS) vulnerability.[0m
+12:                {{task.title|safe}}
+--------------------------------------------------------------------------------
+48:                                  {{task.text|safe}}
+
+[32mdjango.nV/taskManager/templates/taskManager/tutorials/base.html[0m
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.flask.security.xss.audit.template-unescaped-with-safe: Detected a segment of a Flask template where autoescaping is explicitly disabled with '| safe' filter. This allows rendering of raw HTML in this segment. Ensure no user data is rendered here, otherwise this is a cross-site scripting (XSS) vulnerability.[0m
+54:                        <span class="username">{{ user.username|safe }}</span>
+
+[32mdjango.nV/taskManager/views.py[0m
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.performance.access-foreign-keys: You should use ITEM.user_id rather than ITEM.user.id to prevent running an extra query.[0m
+339:        project.users_assigned = [request.user.id]
+--------------------------------------------------------------------------------
+505:        users_assigned=request.user.id).order_by('title')
+--------------------------------------------------------------------------------
+513:        users_assigned=request.user.id,
+--------------------------------------------------------------------------------
+630:        users_assigned=request.user.id).order_by('title')
+--------------------------------------------------------------------------------
+632:        users_assigned=request.user.id).order_by('title')
+--------------------------------------------------------------------------------
+642:        users_assigned=request.user.id).order_by('title')
+--------------------------------------------------------------------------------
+656:    my_task_list = Task.objects.filter(users_assigned=request.user.id)
+--------------------------------------------------------------------------------
+665:        users_assigned=request.user.id).filter(
+--------------------------------------------------------------------------------
+668:        users_assigned=request.user.id).filter(
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'manage_tasks' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+39:def manage_tasks(request, project_id):
+40:
+41:    user = request.user
+42:    proj = Project.objects.get(pk=project_id)
+43:
+44:    if user.is_authenticated():
+45:
+46:        if user.has_perm('can_change_task'):
+47:
+48:            if request.method == 'POST':
+-------- [hid 23 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'manage_projects' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+74:def manage_projects(request):
+75:
+76:    user = request.user
+77:
+78:    if user.is_authenticated():
+79:        logged_in = True
+80:
+81:        if user.has_perm('can_change_group'):
+82:
+83:            if request.method == 'POST':
+-------- [hid 24 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'manage_groups' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+112:def manage_groups(request):
+113:
+114:    user = request.user
+115:
+116:    if user.is_authenticated():
+117:
+118:        user_list = User.objects.order_by('date_joined')
+119:
+120:        if request.method == 'POST':
+121:
+-------- [hid 44 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'upload' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+170:def upload(request, project_id):
+171:
+172:    if request.method == 'POST':
+173:
+174:        proj = Project.objects.get(pk=project_id)
+175:        form = ProjectFileForm(request.POST, request.FILES)
+176:
+177:        if form.is_valid():
+178:            name = request.POST.get('name', False)
+179:            upload_path = store_uploaded_file(name, request.FILES['file'])
+-------- [hid 22 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'download' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+206:def download(request, file_id):
+207:
+208:    file = File.objects.get(pk=file_id)
+209:    abspath = open(
+210:        os.path.dirname(
+211:            os.path.realpath(__file__)) +
+212:        file.path,
+213:        'rb')
+214:    response = HttpResponse(content=abspath.read())
+215:    response['Content-Type'] = mimetypes.guess_type(file.path)[0]
+-------- [hid 2 additional lines, adjust with --max-lines-per-finding] ---------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'download_profile_pic' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+220:def download_profile_pic(request, user_id):
+221:
+222:    user = User.objects.get(pk=user_id)
+223:    filepath = user.userprofile.image
+224:    if len(filepath) > 1:
+225:        return redirect(filepath)
+226:    else:
+227:        return redirect('/static/taskManager/uploads/default.png')
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'task_create' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+240:def task_create(request, project_id):
+241:
+242:    if request.method == 'POST':
+243:
+244:        proj = Project.objects.get(pk=project_id)
+245:
+246:        text = request.POST.get('text', False)
+247:        task_title = request.POST.get('task_title', False)
+248:        now = timezone.now()
+249:        task_duedate = timezone.now() + datetime.timedelta(weeks=1)
+-------- [hid 19 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'task_edit' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+273:def task_edit(request, project_id, task_id):
+274:
+275:    proj = Project.objects.get(pk=project_id)
+276:    task = Task.objects.get(pk=task_id)
+277:
+278:    if request.method == 'POST':
+279:
+280:        if task.project == proj:
+281:
+282:            text = request.POST.get('text', False)
+-------- [hid 12 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'task_delete' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+299:def task_delete(request, project_id, task_id):
+300:    proj = Project.objects.get(pk=project_id)
+301:    task = Task.objects.get(pk=task_id)
+302:    if proj is not None:
+303:        if task is not None and task.project == proj:
+304:            task.delete()
+305:
+306:    return redirect('/taskManager/' + project_id + '/')
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'task_complete' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+311:def task_complete(request, project_id, task_id):
+312:    proj = Project.objects.get(pk=project_id)
+313:    task = Task.objects.get(pk=task_id)
+314:    if proj is not None:
+315:        if task is not None and task.project == proj:
+316:            task.completed = not task.completed
+317:            task.save()
+318:
+319:    return redirect('/taskManager/' + project_id)
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'project_create' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+322:def project_create(request):
+323:
+324:    if request.method == 'POST':
+325:
+326:        title = request.POST.get('title', False)
+327:        text = request.POST.get('text', False)
+328:        project_priority = int(request.POST.get('project_priority', False))
+329:        now = timezone.now()
+330:        project_duedate = timezone.make_aware(datetime.datetime.fromtimestamp(
+331:            int(request.POST.get('project_duedate', False))))
+-------- [hid 15 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'project_edit' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+350:def project_edit(request, project_id):
+351:
+352:    proj = Project.objects.get(pk=project_id)
+353:
+354:    if request.method == 'POST':
+355:
+356:        title = request.POST.get('title', False)
+357:        text = request.POST.get('text', False)
+358:        project_priority = int(request.POST.get('project_priority', False))
+359:        project_duedate = datetime.datetime.fromtimestamp(
+-------- [hid 12 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'project_delete' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+376:def project_delete(request, project_id):
+377:    # IDOR
+378:    project = Project.objects.get(pk=project_id)
+379:    project.delete()
+380:    return redirect('/taskManager/dashboard')
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'logout_view' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+385:def logout_view(request):
+386:    logout(request)
+387:    return redirect(request.GET.get('redirect', '/taskManager/'))
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'login' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+390:def login(request):
+391:    if request.method == 'POST':
+392:        username = request.POST.get('username', False)
+393:        password = request.POST.get('password', False)
+394:
+395:        if User.objects.filter(username=username).exists():
+396:            user = authenticate(username=username, password=password)
+397:            if user is not None:
+398:                if user.is_active:
+399:                    auth_login(request, user)
+-------- [hid 19 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'register' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+421:def register(request):
+422:
+423:    context = RequestContext(request)
+424:
+425:    registered = False
+426:
+427:    if request.method == 'POST':
+428:
+429:        user_form = UserForm(data=request.POST)
+430:
+-------- [hid 33 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'index' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+466:def index(request):
+467:    sorted_projects = Project.objects.order_by('-start_date')
+468:
+469:    admin_level = False
+470:
+471:    if request.user.groups.filter(name='admin_g').exists():
+472:        admin_level = True
+473:
+474:    list_to_show = []
+475:    for project in sorted_projects:
+-------- [hid 13 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'profile_view' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+491:def profile_view(request, user_id):
+492:    try:
+493:        user = User.objects.get(pk=user_id)
+494:    except User.DoesNotExist:
+495:        return redirect("/taskManager/dashboard")
+496:
+497:    if request.user.groups.filter(name='admin_g').exists():
+498:        role = "Admin"
+499:    elif request.user.groups.filter(name='project_managers').exists():
+500:        role = "Project Manager"
+-------- [hid 8 additional lines, adjust with --max-lines-per-finding] ---------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'project_details' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+511:def project_details(request, project_id):
+512:    proj = Project.objects.filter(
+513:        users_assigned=request.user.id,
+514:        pk=project_id)
+515:    if not proj:
+516:        messages.warning(
+517:            request,
+518:            'You are not authorized to view this project')
+519:        return redirect('/taskManager/dashboard')
+520:    else:
+-------- [hid 5 additional lines, adjust with --max-lines-per-finding] ---------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'note_create' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+530:def note_create(request, project_id, task_id):
+531:    if request.method == 'POST':
+532:
+533:        parent_task = Task.objects.get(pk=task_id)
+534:
+535:        note_title = request.POST.get('note_title', False)
+536:        text = request.POST.get('text', False)
+537:
+538:        note = Notes(
+539:            title=note_title,
+-------- [hid 10 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'note_edit' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+554:def note_edit(request, project_id, task_id, note_id):
+555:
+556:    proj = Project.objects.get(pk=project_id)
+557:    task = Task.objects.get(pk=task_id)
+558:    note = Notes.objects.get(pk=note_id)
+559:
+560:    if request.method == 'POST':
+561:
+562:        if task.project == proj:
+563:
+-------- [hid 13 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'note_delete' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+581:def note_delete(request, project_id, task_id, note_id):
+582:    proj = Project.objects.get(pk=project_id)
+583:    task = Task.objects.get(pk=task_id)
+584:    note = Notes.objects.get(pk=note_id)
+585:    if proj is not None:
+586:        if task is not None and task.project == proj:
+587:            if note is not None and note.task == task:
+588:                note.delete()
+589:
+590:    return redirect('/taskManager/' + project_id + '/' + task_id)
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'task_details' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+593:def task_details(request, project_id, task_id):
+594:
+595:    task = Task.objects.get(pk=task_id)
+596:
+597:    logged_in = True
+598:
+599:    if not request.user.is_authenticated():
+600:        logged_in = False
+601:
+602:    admin_level = False
+-------- [hid 23 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'dashboard' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+628:def dashboard(request):
+629:    sorted_projects = Project.objects.filter(
+630:        users_assigned=request.user.id).order_by('title')
+631:    sorted_tasks = Task.objects.filter(
+632:        users_assigned=request.user.id).order_by('title')
+633:    return render(request,
+634:                  'taskManager/dashboard.html',
+635:                  {'project_list': sorted_projects,
+636:                   'user': request.user,
+637:                   'task_list': sorted_tasks})
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'project_list' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+640:def project_list(request):
+641:    sorted_projects = Project.objects.filter(
+642:        users_assigned=request.user.id).order_by('title')
+643:    user_can_edit = request.user.has_perm('project_edit')
+644:    user_can_delete = request.user.has_perm('project_delete')
+645:    user_can_add = request.user.has_perm('project_add')
+646:    return render(request,
+647:                  'taskManager/project_list.html',
+648:                  {'project_list': sorted_projects,
+649:                   'user': request.user,
+-------- [hid 3 additional lines, adjust with --max-lines-per-finding] ---------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'task_list' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+655:def task_list(request):
+656:    my_task_list = Task.objects.filter(users_assigned=request.user.id)
+657:    return render(request, 'taskManager/task_list.html',
+658:                  {'task_list': my_task_list, 'user': request.user})
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'search' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+661:def search(request):
+662:    query = request.GET.get('q', '')
+663:
+664:    my_project_list = Project.objects.filter(
+665:        users_assigned=request.user.id).filter(
+666:            title__icontains=query).order_by('title')
+667:    my_task_list = Task.objects.filter(
+668:        users_assigned=request.user.id).filter(
+669:            title__icontains=query).order_by('title')
+670:    return render(request,
+-------- [hid 5 additional lines, adjust with --max-lines-per-finding] ---------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'tutorials' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+678:def tutorials(request):
+679:    return render(request,
+680:                  'taskManager/tutorials.html',
+681:                  {'user': request.user})
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'show_tutorial' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+684:def show_tutorial(request, vuln_id):
+685:    if vuln_id in [
+686:            "injection",
+687:            "brokenauth",
+688:            "xss",
+689:            "idor",
+690:            "misconfig",
+691:            "exposure",
+692:            "access",
+693:            "csrf",
+-------- [hid 7 additional lines, adjust with --max-lines-per-finding] ---------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'profile' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+703:def profile(request):
+704:    return render(request, 'taskManager/profile.html', {'user': request.user})
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'profile_by_id' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+710:@csrf_exempt
+711:def profile_by_id(request, user_id):
+712:    user = User.objects.get(pk=user_id)
+713:
+714:    if request.method == 'POST':
+715:        form = ProfileForm(request.POST, request.FILES)
+716:        if form.is_valid():
+717:            print("made it!")
+718:            if request.POST.get('username') != user.username:
+719:                user.username = request.POST.get('username')
+-------- [hid 16 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'reset_password' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+739:@csrf_exempt
+740:def reset_password(request):
+741:
+742:    if request.method == 'POST':
+743:
+744:        reset_token = request.POST.get('reset_token')
+745:
+746:        try:
+747:            userprofile = UserProfile.objects.get(reset_token = reset_token)
+748:            if timezone.now() > userprofile.reset_token_expiration:
+-------- [hid 27 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'forgot_password' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+779:@csrf_exempt
+780:def forgot_password(request):
+781:
+782:    if request.method == 'POST':
+783:        t_email = request.POST.get('email')
+784:
+785:        try:
+786:            reset_user = User.objects.get(email=t_email)
+787:
+788:            # Generate secure random 6 digit number
+-------- [hid 21 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'change_password' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+813:@csrf_exempt
+814:def change_password(request):
+815:
+816:    if request.method == 'POST':
+817:        user = request.user
+818:        old_password = request.POST.get('old_password')
+819:        new_password = request.POST.get('new_password')
+820:        confirm_password = request.POST.get('confirm_password')
+821:
+822:        if authenticate(username=user.username, password=old_password):
+-------- [hid 12 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.django-ratelimit.missing-ratelimit: Function 'tm_settings' is missing a rate-limiting decorator. High volume traffic to this function could starve application resources. Consider adding rate limiting from a library such as 'django-ratelimit'.[0m
+837:def tm_settings(request):
+838:    settings_list = request.META
+839:    return render(request,
+840:                  'taskManager/settings.html',
+841:                  {'settings': settings_list})
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.no-csrf-exempt: There is rarely a good reason to use @csrf_exempt as is used for `profile_by_id`.[0m
+710:@csrf_exempt
+711:def profile_by_id(request, user_id):
+712:    user = User.objects.get(pk=user_id)
+713:
+714:    if request.method == 'POST':
+715:        form = ProfileForm(request.POST, request.FILES)
+716:        if form.is_valid():
+717:            print("made it!")
+718:            if request.POST.get('username') != user.username:
+719:                user.username = request.POST.get('username')
+-------- [hid 16 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.no-csrf-exempt: There is rarely a good reason to use @csrf_exempt as is used for `reset_password`.[0m
+739:@csrf_exempt
+740:def reset_password(request):
+741:
+742:    if request.method == 'POST':
+743:
+744:        reset_token = request.POST.get('reset_token')
+745:
+746:        try:
+747:            userprofile = UserProfile.objects.get(reset_token = reset_token)
+748:            if timezone.now() > userprofile.reset_token_expiration:
+-------- [hid 27 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.no-csrf-exempt: There is rarely a good reason to use @csrf_exempt as is used for `forgot_password`.[0m
+779:@csrf_exempt
+780:def forgot_password(request):
+781:
+782:    if request.method == 'POST':
+783:        t_email = request.POST.get('email')
+784:
+785:        try:
+786:            reset_user = User.objects.get(email=t_email)
+787:
+788:            # Generate secure random 6 digit number
+-------- [hid 21 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.no-csrf-exempt: There is rarely a good reason to use @csrf_exempt as is used for `change_password`.[0m
+813:@csrf_exempt
+814:def change_password(request):
+815:
+816:    if request.method == 'POST':
+817:        user = request.user
+818:        old_password = request.POST.get('old_password')
+819:        new_password = request.POST.get('new_password')
+820:        confirm_password = request.POST.get('confirm_password')
+821:
+822:        if authenticate(username=user.username, password=old_password):
+-------- [hid 12 additional lines, adjust with --max-lines-per-finding] --------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.unvalidated-password: The password on 'user' is being set without validating the password. Call django.contrib.auth.password_validation.validate_password() with validation functions before setting the password. See https://docs.djangoproject.com/en/3.0/topics/auth/passwords/ for more information.[0m
+[34mautofix:[0m if django.contrib.auth.password_validation.validate_password(user.password, user=user):
+    user.set_password(user.password)
+436:            user.set_password(user.password)
+--------------------------------------------------------------------------------
+[34mautofix:[0m if django.contrib.auth.password_validation.validate_password(request.POST.get('password'), user=user):
+    user.set_password(request.POST.get('password'))
+727:                user.set_password(request.POST.get('password'))
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.unvalidated-password: The password on 'userprofile.user' is being set without validating the password. Call django.contrib.auth.password_validation.validate_password() with validation functions before setting the password. See https://docs.djangoproject.com/en/3.0/topics/auth/passwords/ for more information.[0m
+[34mautofix:[0m if django.contrib.auth.password_validation.validate_password(new_password, user=userprofile.user):
+    userprofile.user.set_password(new_password)
+766:        userprofile.user.set_password(new_password)
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.unvalidated-password: The password on 'user' is being set without validating the password. Call django.contrib.auth.password_validation.validate_password() with validation functions before setting the password. See https://docs.djangoproject.com/en/3.0/topics/auth/passwords/ for more information.[0m
+[34mautofix:[0m if django.contrib.auth.password_validation.validate_password(new_password, user=user):
+    user.set_password(new_password)
+824:                user.set_password(new_password)
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.audit.xss.direct-use-of-httpresponse: Detected data rendered directly to the end user via 'HttpResponse' or a similar object. This bypasses Django's built-in cross-site scripting (XSS) defenses and could result in an XSS vulnerability. Use Django's template engine to safely render HTML.[0m
+214:    response = HttpResponse(content=abspath.read())
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.injection.open-redirect: Data from request ($DATA) is passed to redirect(). This is an open redirect and could be exploited. Ensure you are redirecting to safe URLs by using django.utils.http.is_safe_url(). See https://cwe.mitre.org/data/definitions/601.html for more information.[0m
+387:    return redirect(request.GET.get('redirect', '/taskManager/'))
+--------------------------------------------------------------------------------
+387:    return redirect(request.GET.get('redirect', '/taskManager/'))
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.django.security.injection.sql.sql-injection-db-cursor-execute: Data from request is passed to execute(). This is a SQL injection and could be exploited. See https://docs.djangoproject.com/en/3.0/topics/security/#sql-injection-protection to learn how to mitigate. See https://cwe.mitre.org/data/definitions/89.html to learn about SQLi.[0m
+178:            name = request.POST.get('name', False)
+179:            upload_path = store_uploaded_file(name, request.FILES['file'])
+180:
+181:            #A1 - Injection (SQLi)
+182:            curs = connection.cursor()
+183:            curs.execute(
+184:                "insert into taskManager_file ('name','path','project_id') values ('%s','%s',%s)" %
+185:                (name, upload_path, project_id))
+--------------------------------------------------------------------------------
+[31mseverity:error [0m[33mrule:home.developer.acas.semgrep-rules.python.lang.best-practice.open-never-closed: file object opened without corresponding close[0m
+209:    abspath = open(
+210:        os.path.dirname(
+211:            os.path.realpath(__file__)) +
+212:        file.path,
+213:        'rb')
+--------------------------------------------------------------------------------
+[33mseverity:warning [0m[33mrule:home.developer.acas.semgrep-rules.python.lang.security.audit.formatted-sql-query: Detected possible formatted SQL query. Use parameterized queries instead.[0m
+183:            curs.execute(
+184:                "insert into taskManager_file ('name','path','project_id') values ('%s','%s',%s)" %
+185:                (name, upload_path, project_id))
+--------------------------------------------------------------------------------
+[31mseverity:error [0m[33mrule:home.developer.acas.semgrep-rules.python.sqlalchemy.security.sqlalchemy-execute-raw-query: Avoiding SQL string concatenation: untrusted input concatenated with raw SQL query can result in SQL Injection. In order to execute raw query safely, prepared statement should be used. SQLAlchemy provides TextualSQL to easily used prepared statement with named parameters. For complex SQL composition, use SQL Expression Language or Schema Definition Language. In most cases, SQLAlchemy ORM will be a better option.[0m
+183:            curs.execute(
+184:                "insert into taskManager_file ('name','path','project_id') values ('%s','%s',%s)" %
+185:                (name, upload_path, project_id))
+
+Semgrep-core timing summary:
+Total CPU time: 7.1616  File parse time: 1.0745  Rule parse time: 1.5554  Match time: 2.9054
+Slowest 5/189 files
+[32mdjango.nV/taskManager/views.py                                        [0m ( 26KB): 1.1365
+[32mdjango.nV/taskManager/migrations/0033_auto_20150325_0159.py           [0m (999B):  0.2282
+[32mdjango.nV/taskManager/migrations/0021_task_due_date.py                [0m (557B):  0.2225
+[32mdjango.nV/taskManager/migrations/0009_task_users_assinged.py          [0m (569B):  0.2146
+[32mdjango.nV/taskManager/wsgi.py                                         [0m (397B):  0.2034
+Slowest 5 rules to run (excluding parse time)
+[33m...r.acas.semgrep-rules.python.django.security.injection.open-redirect:[0m run time 0.3180  match time 0.2145
+[33m...python.django.security.injection.path-traversal.path-traversal-join:[0m run time 0.2950  match time 0.2792
+[33m...n.django.security.injection.path-traversal.path-traversal-file-name:[0m run time 0.2873  match time 0.2778
+[33m...s.semgrep-rules.python.flask.security.injection.path-traversal-open:[0m run time 0.2638  match time 0.0000
+[33m...python.django.security.injection.path-traversal.path-traversal-open:[0m run time 0.1927  match time 0.1157
